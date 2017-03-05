@@ -1,0 +1,9 @@
+version: '2'
+
+services:
+    flask:
+        build: docker_python/
+        ports:
+          - "80:80"
+        volumes:
+          - ./src:/app
