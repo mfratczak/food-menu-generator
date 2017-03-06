@@ -4,7 +4,7 @@ English: soon
 
 How to start:
 
-$ git clone git@github.com:mfratczak/food-menu-generator.git
+$ git clone git@github.com:mfratczak/myfood-generator.git
 
 $ cd food-menu-generator/
 
