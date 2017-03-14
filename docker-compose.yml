@@ -2,8 +2,8 @@ version: '2'
 
 services:
     flask:
-        build: docker_python/
+        build: docker/python/
         ports:
-          - "80:80"
+          - "1025:80"
         volumes:
-          - ./src:/app
+          - ./WebServer:/app
