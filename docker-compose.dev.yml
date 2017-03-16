@@ -1,0 +1,24 @@
+version: '2'
+
+services:
+    api:
+        build: Docker/python/
+#        dockerfile: Dockerfile-dev
+        ports:
+          - "1125:80"
+        volumes:
+          - ./WebServer:/app
+        command: python server.py
+    web:
+        build: Docker/npm/
+
+        ports:
+          - 8080:3000
+        volumes:
+          - ./WebClient:/app
+        environment:
+          NODE_PORT: 3000
+          NODE_MODE: dev
+        depends_on:
+         - api
+        command: [npm, start]
