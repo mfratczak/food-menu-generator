@@ -1,9 +1,24 @@
 version: '2'
 
 services:
-    flask:
-        build: docker/python/
+    api:
+        build: Docker/python/
+#        dockerfile: Dockerfile-dev
         ports:
           - "1025:80"
         volumes:
           - ./WebServer:/app
+        command: python server.py
+    web:
+        build: Docker/npm/
+
+        ports:
+          - 80:3000
+        volumes:
+          - ./WebClient:/app
+        environment:
+          NODE_PORT: 3000
+          NODE_MODE: prod
+        depends_on:
+         - api
+        command: [npm, start]
