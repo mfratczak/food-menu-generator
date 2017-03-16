@@ -2,6 +2,7 @@ version: '3.1'
 
 services:
     api:
+        #container_name: Imusttestit
         build: #https://docs.docker.com/compose/compose-file/#dockerfile
           context: Docker/python
           dockerfile: Dockerfile
@@ -10,8 +11,9 @@ services:
         volumes:
           - ./WebServer:/app
         command: python server.py
+        restart: always
     web:
-        build: 
+        build:
           context: Docker/npm/
           dockerfile: Dockerfile
 
@@ -21,7 +23,8 @@ services:
           - ./WebClient:/app
         environment:
           NODE_PORT: 3000
-          NODE_MODE: prod
+          NODE_MODE: dev
         depends_on:
          - api
         command: [npm, start]
+        restart: always

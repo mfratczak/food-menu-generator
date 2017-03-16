@@ -1,7 +1,7 @@
 version: '3.1'
 
 services:
-    api:
+    api-dev:
         build: #https://docs.docker.com/compose/compose-file/#dockerfile
           context: Docker/python
           dockerfile: Dockerfile-dev
@@ -10,7 +10,8 @@ services:
         volumes:
           - ./WebServer:/app
         command: python server.py
-    web:
+        restart: always
+    web-dev:
         build:
           context: Docker/npm/
           dockerfile: Dockerfile-dev
@@ -22,5 +23,6 @@ services:
           NODE_PORT: 3000
           NODE_MODE: prod
         depends_on:
-         - api
+         - api-dev
         command: [npm, start]
+        restart: always
