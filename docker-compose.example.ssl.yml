@@ -15,21 +15,30 @@ services:
         command: python server.py
         restart: always
         network_mode: "bridge"
+    api2:
+        build:
+          context: Docker/python
+          dockerfile: Dockerfile
+        environment:
+         - FORCE_SSL=yes
+         - VIRTUAL_HOST=api.myfood.dev,api.myfood.love,https://api.myfood.love
+        volumes:
+          - ./WebServer:/app
+        links:
+          - mysql
+        command: python server.py
+        restart: always
+        network_mode: "bridge"
     web:
         build:
-          context: Docker/npm/
+          context: Docker/python
           dockerfile: Dockerfile
         environment:
          - FORCE_SSL=yes
          - VIRTUAL_HOST=myfood.dev,myfood.love,https://myfood.love
         volumes:
-          - ./WebClient:/app
-        environment:
-          NODE_PORT: 3000
-          NODE_MODE: dev
-        depends_on:
-         - api
-        command: [npm, start]
+          - ./WebServer:/app
+        command: python server.py
         restart: always
         network_mode: "bridge"
     mysql:
@@ -40,9 +49,16 @@ services:
         - DB_USER=foodlogin
         - DB_PASS=password
         - DB_NAME=myfood
-        ports:
-         - "80:80"
         network_mode: "bridge"
+    phpmyadmin:
+      image: phpmyadmin/phpmyadmin
+      links:
+        - mysql
+      ports:
+        - "9999:80"
+      environment:
+        PMA_HOST: mysql
+      network_mode: "bridge"
     letsencrypt:
       image: interaction/letsencrypt:master
       environment:
@@ -59,10 +75,12 @@ services:
        links:
          - letsencrypt
          - api
+         - api2
          - web
        depends_on:
          - letsencrypt
          - api
+         - api2
          - web
        ports:
          - "80:80"

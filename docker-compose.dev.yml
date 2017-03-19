@@ -1,28 +1,79 @@
 version: '3.1'
 
 services:
-    api-dev:
-        build: #https://docs.docker.com/compose/compose-file/#dockerfile
+    api:
+        build:
           context: Docker/python
-          dockerfile: Dockerfile-dev
-        ports:
-          - "1026:80"
+          dockerfile: Dockerfile
+        environment:
+        #  - FORCE_SSL=yes
+         - VIRTUAL_HOST=api.myfood.dev,api.myfood.love,https://api.myfood.love
         volumes:
           - ./WebServer:/app
+        links:
+          - mysql
         command: python server.py
         restart: always
-    web-dev:
+        network_mode: "bridge"
+    web:
         build:
           context: Docker/npm/
-          dockerfile: Dockerfile-dev
-        ports:
-          - 8080:3000
+          dockerfile: Dockerfile
+        environment:
+        #  - FORCE_SSL=yes
+         - VIRTUAL_HOST=myfood.dev,myfood.love,https://myfood.love
         volumes:
           - ./WebClient:/app
         environment:
           NODE_PORT: 3000
-          NODE_MODE: prod
+          NODE_MODE: dev
         depends_on:
-         - api-dev
-        command: [npm, start]
+         - api
+        command: [npm init]
         restart: always
+        network_mode: "bridge"
+    mysql:
+        image: sameersbn/mysql:latest
+        volumes:
+         - ./Data/database:/var/lib/mysql
+        environment:
+        - DB_USER=foodlogin
+        - DB_PASS=password
+        - DB_NAME=myfood
+        network_mode: "bridge"
+    phpmyadmin:
+      image: phpmyadmin/phpmyadmin
+      links:
+        - mysql
+      ports:
+        - "9999:80"
+      environment:
+        PMA_HOST: mysql
+      network_mode: "bridge"
+    letsencrypt:
+      image: interaction/letsencrypt:master
+      environment:
+        - DOMAINS=api.myfood.love myfood.love
+        - EMAIL=admins@myfood.love
+      expose:
+        - "80"
+      volumes:
+        - ./Data/letsencrypt:/etc/letsencrypt
+        - ./Logs/letsencrypt:/var/log/letsencrypt
+      network_mode: "bridge"
+    haproxy:
+       image: interaction/haproxy:master
+       links:
+         - letsencrypt
+         - api
+        #  - web
+       depends_on:
+         - letsencrypt
+         - api
+        #  - web
+       ports:
+         - "80:80"
+         - "443:443"
+       volumes:
+         - ./Data/letsencrypt:/etc/letsencrypt
+       network_mode: "bridge"
