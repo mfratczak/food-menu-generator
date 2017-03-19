@@ -4,7 +4,7 @@ RUN apt-get update && apt-get install -y \
     git \
     unzip
 
-RUN pip install flask cherrypy
+RUN pip install flask cherrypy var_dump
 #RUN pip install -r /src/requirements.txt
 
 EXPOSE 80

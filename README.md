@@ -1,7 +1,7 @@
 # Menu-Food- Generator
 
 0. Docker Information
-    * haproxy -> myproxy to split traffic into different domain (todo)
+    * haproxy -> myproxy to split traffic into different domain (todo) #https://github.com/docker/dockercloud-haproxy
     * web container (react) -> myfood.dev
     * api container (flask) -> api.myfood.dev
     * database container (mysql) -> port 3306
@@ -58,7 +58,7 @@ $ docker-compose -f docker-compose.dev.yml up --build
         
         http://api.myfood.dev:1025/ and see hello world! :D [port will be deleted
     ```
-    Production:
+    Development:
     ```
         Web:
         
