@@ -52,25 +52,15 @@ $ docker-compose -f docker-compose.dev.yml up --build
 
 4. Live version
 
-    Production:
-    ```
+        ```
         Web:
 
         http://myfood.dev/ and see hello world! :D
 
         Api:
 
-        http://api.myfood.dev:1025/ and see hello world! :D [port will be deleted
-    ```
-    Development:
-    ```
-        Web:
+        http://api.myfood.dev/ and see hello world! :D
 
-        http://myfood.dev:8080/ and see hello world! :D
-
-        Api:
-
-        http://api.myfood.dev:1026/ and see hello world! :D
     ```
 
 5. Extra option    
