@@ -40,8 +40,6 @@ services:
         - DB_USER=foodlogin
         - DB_PASS=password
         - DB_NAME=myfood
-        ports:
-         - "80:80"
         network_mode: "bridge"
     letsencrypt:
       image: interaction/letsencrypt:master
