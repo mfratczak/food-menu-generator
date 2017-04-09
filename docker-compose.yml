@@ -29,7 +29,7 @@ services:
           NODE_MODE: dev
         depends_on:
          - api
-        command: [npm, start]
+        command: npm run serve:dist
         restart: always
         network_mode: "bridge"
     mysql:
